@@ -6,6 +6,10 @@ Telegram 定时提醒管理系统。适合学习 **Core PHP + MySQL + Cron + Tel
 
 ## Screenshots
 
+### Login
+
+![Login](docs/screenshots/login.png)
+
 ### Dashboard
 
 ![Dashboard](docs/screenshots/dashboard.png)
@@ -14,13 +18,9 @@ Telegram 定时提醒管理系统。适合学习 **Core PHP + MySQL + Cron + Tel
 
 ![Reminders](docs/screenshots/reminders.png)
 
-### Telegram Users
+### Admins
 
-![Telegram Users](docs/screenshots/telegram-users.png)
-
-### Message Logs
-
-![Message Logs](docs/screenshots/message-logs.png)
+![Admins](docs/screenshots/admins.png)
 
 ## Features
 
