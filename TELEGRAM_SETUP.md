@@ -13,7 +13,7 @@
 1. 打开 Telegram，搜索 `@BotFather`
 2. 发送 `/newbot`
 3. 按提示设置显示名称（例如 `KHS Reminder`）
-4. 设置用户名，必须以 `bot` 结尾（例如 `khsreminder_bot`）
+4. 设置用户名，必须以 `bot` 结尾（例如 `YourBotUsername_bot`）
 5. BotFather 会返回 **HTTP API Token**，格式类似：
    `123456789:AAHxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 6. 把 Token 填进 `config/telegram.php` 的 `bot_token`，或在 `install.php` 中填写
@@ -33,7 +33,7 @@ Telegram **不允许**机器人主动给从未互动过的账号发消息。
 
 每个接收人需要：
 
-1. 搜索 `@khsreminder_bot`（或你的机器人用户名）
+1. 搜索你的机器人用户名（`config/telegram.php` 里的 `bot_username`）
 2. 点击 **Start** 或发送 `/start`
 
 否则 API 会返回 `Forbidden: bot was blocked by the user` 或 `chat not found`。

@@ -7,8 +7,8 @@ if (is_logged_in()) {
 }
 
 $error = '';
-$prefillUser = 'admin';
-$prefillPass = 'Admin@123';
+$prefillUser = '';
+$prefillPass = '';
 if (is_post()) {
     csrf_verify_request();
     $result = attempt_login((string) post('username'), (string) post('password'));
@@ -52,7 +52,7 @@ if (is_post()) {
         <section class="auth-card-wrap">
             <div class="auth-card">
                 <h2>Admin sign in</h2>
-                <p class="muted">Default login is already filled in. Click Sign in.</p>
+                <p class="muted">Sign in with the account you created during install.</p>
                 <?php if ($error !== ''): ?>
                     <div class="alert alert-danger py-2"><?= e($error) ?></div>
                 <?php endif; ?>

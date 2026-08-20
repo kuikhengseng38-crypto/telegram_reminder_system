@@ -105,14 +105,6 @@ CREATE TABLE `login_attempts` (
   KEY `idx_la_ip_time` (`ip_address`, `attempted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `admins` (`username`, `password`, `email`, `is_active`)
-VALUES (
-  'admin',
-  '$2y$12$5YoZdw2rYDUWEr0NAvn3X.vcSwZMX4FANpccc82B64w4QEMdwfYpa',
-  'admin@example.com',
-  1
-);
-
--- Add Telegram recipients from the admin panel after install.
+-- Schema only. Create the first admin with install.php, not with a seeded password hash.
 
 SET FOREIGN_KEY_CHECKS = 1;

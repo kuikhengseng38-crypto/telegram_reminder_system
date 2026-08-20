@@ -1,5 +1,8 @@
-# Production cron (cPanel) — optional
+# Optional cPanel cron (every 1 minute)
 # The admin site already sends due reminders from PHP while it is open.
-# On shared hosting you may also add this every 1 minute:
 
-php /home/USERNAME/public_html/cron/send_reminders.php >/dev/null 2>&1
+# CLI:
+php /home/YOUR_CPANEL_USER/public_html/cron/send_reminders.php >/dev/null 2>&1
+
+# HTTP (if CLI is disabled). Do not put a real key in git:
+# curl -s "https://YOUR_DOMAIN/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/dev/null 2>&1

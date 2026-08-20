@@ -1,7 +1,8 @@
 <?php
 /**
- * Telegram Bot API configuration
- * Copy from telegram.example.php. Do not commit this file.
+ * EXAMPLE Telegram Bot API configuration.
+ * Copy this file to telegram.php and fill in your own values.
+ * Do not commit telegram.php.
  */
 
 return [

@@ -9,6 +9,20 @@ if (!defined('BASE_PATH')) {
     define('BASE_PATH', dirname(__DIR__));
 }
 
+foreach (['app', 'database', 'telegram'] as $configName) {
+    $configPath = BASE_PATH . '/config/' . $configName . '.php';
+    if (!is_file($configPath)) {
+        $hint = 'Missing config/' . $configName . '.php. Copy config/' . $configName
+            . '.example.php to config/' . $configName . '.php and fill in your values, or run install.php.';
+        if (PHP_SAPI === 'cli') {
+            fwrite(STDERR, $hint . PHP_EOL);
+            exit(1);
+        }
+        http_response_code(500);
+        exit($hint);
+    }
+}
+
 $configApp = require BASE_PATH . '/config/app.php';
 $configDb  = require BASE_PATH . '/config/database.php';
 $configTg  = require BASE_PATH . '/config/telegram.php';

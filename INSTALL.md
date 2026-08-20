@@ -2,6 +2,8 @@
 
 本系统使用 **Core PHP + MySQL + Cron**，不依赖 Laravel / Composer 框架。要求 PHP 7.4+、PDO MySQL、cURL（推荐）。
 
+真实密码、Bot Token、`cron_secret` 只放在服务器上的 `config/*.php`。仓库里只有 `config/*.example.php`。
+
 ---
 
 ## 1. 上传文件
@@ -22,11 +24,11 @@
 
 在 cPanel → **MySQL Databases**：
 
-1. 创建数据库（例如 `user_telegram`）
+1. 创建数据库
 2. 创建数据库用户并设置强密码
 3. 将该用户加入数据库，权限选 **ALL PRIVILEGES**
 
-记下：主机（一般为 `localhost`）、库名、用户名、密码。
+记下：主机（一般为 `localhost`）、库名、用户名、密码。不要把这些值写进公开文档。
 
 ---
 
@@ -34,35 +36,33 @@
 
 浏览器打开：
 
-`https://你的域名/install.php`
+`https://YOUR_DOMAIN/install.php`
 
 填写：
 
 - 数据库连接信息
-- 管理员账号 / 邮箱 / 密码
+- 管理员账号 / 邮箱 / 密码（请使用强密码）
 - Bot Token（从 BotFather 获取）
-- Cron 密钥
+- Cron 密钥（随机长字符串）
 
 安装成功后：
 
 1. 访问 `/admin/login.php` 登录
 2. **立刻删除** `install.php`
+3. 安装后请立刻确认后台密码已改成你自己的强密码
 
 ---
 
 ## 4. 安装方式 B：手动导入
 
-1. 用 phpMyAdmin 选中你的数据库
-2. 导入 `database/schema.sql`
-   - 若 `CREATE DATABASE` 报权限错误：删掉文件开头的 `CREATE DATABASE` 和 `USE` 两句后再导入
-3. 编辑配置文件：
-   - `config/database.php` — 数据库账号
-   - `config/telegram.php` — Bot Token
-   - `config/app.php` — 时区、`cron_secret`
-4. 默认管理员：
-   - 用户名：`admin`
-   - 密码：`Admin@123`
-   - **登录后立即修改密码**
+1. 复制示例配置：
+   - `config/database.example.php` → `config/database.php`
+   - `config/app.example.php` → `config/app.php`
+   - `config/telegram.example.php` → `config/telegram.php`
+2. 把占位符改成你自己的值（`your_db_password`、`YOUR_TELEGRAM_BOT_TOKEN`、`YOUR_CRON_SECRET` 等）
+3. 用 phpMyAdmin 选中你的数据库
+4. 导入 `database/schema_cpanel.sql`（仅表结构，无真实数据、无默认密码哈希）
+5. 用 `install.php` 创建管理员，或在后台自行添加管理员账号
 
 ---
 
@@ -75,7 +75,7 @@
 cPanel → Cron Jobs → Common Settings 选 **Once Per Minute**：
 
 ```bash
-php /home/你的cPanel用户名/public_html/cron/send_reminders.php >/dev/null 2>&1
+php /home/YOUR_CPANEL_USER/public_html/cron/send_reminders.php >/dev/null 2>&1
 ```
 
 若项目在子目录，把路径改成实际路径。
@@ -85,10 +85,10 @@ php /home/你的cPanel用户名/public_html/cron/send_reminders.php >/dev/null 2
 `config/app.php` 里的 `cron_secret` 必须与 URL 中的 `key` 一致：
 
 ```bash
-curl -s "https://你的域名/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/dev/null 2>&1
+curl -s "https://YOUR_DOMAIN/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/dev/null 2>&1
 ```
 
-没有正确 `key` 的访问会返回 403。
+没有正确 `key` 的访问会返回 403。不要把真实密钥写进 README 或提交到 GitHub。
 
 ### 时区
 
@@ -99,7 +99,7 @@ curl -s "https://你的域名/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/de
 ## 6. 登录后台
 
 - 地址：`/admin/login.php`
-- 功能：显示密码、忘记密码、安全 Session
+- 使用安装时你自己设置的账号
 - 忘记密码会发邮件；若主机 `mail()` 不可用，重置链接会写入受保护的 `logs/password_reset.log`
 
 ---
@@ -120,10 +120,11 @@ curl -s "https://你的域名/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/de
 ## 8. 安全检查清单
 
 - [ ] 删除 `install.php`
-- [ ] 修改默认管理员密码
+- [ ] 后台使用你自己的强密码（不要把生产密码写进文档）
 - [ ] `config/` 与 `logs/` 已通过 `.htaccess` 禁止网页访问
-- [ ] Cron 使用密钥或 CLI，不要把密钥发到公开聊天
-- [ ] Bot Token 只放在 `config/telegram.php`
+- [ ] 真实 `config/*.php` 未提交到 GitHub
+- [ ] Cron 使用 `YOUR_CRON_SECRET` 占位写在文档里，真实 key 只在服务器上
+- [ ] Bot Token 只放在服务器上的 `config/telegram.php`
 - [ ] 所有数据库操作为 PDO 预处理语句
 
 ---
@@ -134,10 +135,10 @@ curl -s "https://你的域名/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/de
 查看 `logs/cron.log` 和 `logs/telegram.log`。确认提醒状态是 `pending`，时间已到期。
 
 **Telegram 报 bot was blocked / chat not found**  
-用户必须先在 Telegram 打开 `@khsreminder_bot` 并发送 `/start`。`chat_id` 必须完全正确。
+用户必须先在 Telegram 打开你的机器人并发送 `/start`。`chat_id` 必须完全正确。
 
 **忘记密码收不到邮件**  
-用 FTP 打开 `logs/password_reset.log` 复制链接；或在 phpMyAdmin 把 `admins.password` 改成新的 bcrypt 哈希。
+用 FTP 打开 `logs/password_reset.log` 复制链接；或在 phpMyAdmin 为管理员设置新的 bcrypt 哈希。
 
 **429 Too Many Requests**  
 系统已在每条消息之间加入延迟。若一次提醒人数很多，可把 `config/app.php` 的 `message_delay_ms` 调到 `1500` 或 `2000`。

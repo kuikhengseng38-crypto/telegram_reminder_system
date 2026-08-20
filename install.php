@@ -50,7 +50,7 @@ if (!$installed && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $adminEmail = trim((string) ($_POST['admin_email'] ?? ''));
     $adminPass = (string) ($_POST['admin_pass'] ?? '');
     $botToken = trim((string) ($_POST['bot_token'] ?? ''));
-    $botName = trim((string) ($_POST['bot_username'] ?? 'khsreminder_bot'));
+    $botName = trim((string) ($_POST['bot_username'] ?? 'YourBotUsername'));
     $cronSecret = trim((string) ($_POST['cron_secret'] ?? ''));
     if ($cronSecret === '') {
         $cronSecret = bin2hex(random_bytes(16));
@@ -97,8 +97,14 @@ if (!$installed && $_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $hash = password_hash($adminPass, PASSWORD_BCRYPT);
-            $upd = $pdo->prepare('UPDATE admins SET username = ?, email = ?, password = ? WHERE id = 1');
-            $upd->execute([$adminUser, $adminEmail, $hash]);
+            $existing = (int) $pdo->query('SELECT COUNT(*) FROM admins')->fetchColumn();
+            if ($existing > 0) {
+                $upd = $pdo->prepare('UPDATE admins SET username = ?, email = ?, password = ? WHERE id = 1');
+                $upd->execute([$adminUser, $adminEmail, $hash]);
+            } else {
+                $ins = $pdo->prepare('INSERT INTO admins (username, email, password, is_active) VALUES (?, ?, ?, 1)');
+                $ins->execute([$adminUser, $adminEmail, $hash]);
+            }
 
             $appKey = bin2hex(random_bytes(32));
             write_php_config(BASE_PATH . '/config/database.php', [
@@ -147,7 +153,7 @@ $defaults = [
     'admin_user' => 'admin',
     'admin_email' => 'admin@example.com',
     'bot_token' => '',
-    'bot_username' => 'khsreminder_bot',
+    'bot_username' => 'YourBotUsername',
     'cron_secret' => '',
 ];
 ?>

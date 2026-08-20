@@ -1,7 +1,8 @@
 <?php
 /**
- * Application configuration
- * Copy from app.example.php. Do not commit this file.
+ * EXAMPLE application configuration.
+ * Copy this file to app.php and fill in your own values.
+ * Do not commit app.php.
  */
 
 return [

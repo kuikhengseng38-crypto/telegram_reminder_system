@@ -1,7 +1,8 @@
 <?php
 /**
- * MySQL configuration
- * Copy from database.example.php. Do not commit this file.
+ * EXAMPLE MySQL configuration.
+ * Copy this file to database.php and fill in your own values.
+ * Do not commit database.php.
  */
 
 return [

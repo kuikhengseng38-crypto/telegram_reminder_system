@@ -39,36 +39,42 @@ Telegram 定时提醒管理系统。适合学习 **Core PHP + MySQL + Cron + Tel
 
 ## Quick start
 
-1. 在 cPanel 创建 MySQL 数据库和用户。
-2. 把项目上传到 `public_html/`（或子目录）。
-3. 打开 `/install.php` 填写数据库、管理员和 Bot Token；或导入 `database/schema.sql` 后编辑 `/config`。
-4. 用 `/admin/login.php` 登录，添加 Telegram 用户，创建提醒。
-5. 配置每分钟 Cron，详见 [INSTALL.md](INSTALL.md)。
-6. 安装成功后删除 `install.php`。
-
-默认登录（安装后请立刻修改）：
-
-- 地址：`/admin/login.php`
-- 用户名：`admin`
-- 密码：`Admin@123`
+1. 在主机上创建 MySQL 数据库和用户。
+2. 复制示例配置并填入你自己的值（不要提交真实文件）：
+   - `config/database.example.php` → `config/database.php`
+   - `config/app.example.php` → `config/app.php`
+   - `config/telegram.example.php` → `config/telegram.php`
+3. 或打开 `/install.php` 完成安装。
+4. 导入 `database/schema.sql`（本地）或 `database/schema_cpanel.sql`（cPanel，仅表结构）。
+5. 用 `/admin/login.php` 登录。账号是你在安装时自己设置的。
+6. 安装成功后删除 `install.php`，并立刻使用强密码。
+7. 配置每分钟 Cron，详见 [INSTALL.md](INSTALL.md) 和 [CPANEL.md](CPANEL.md)。
 
 ## Configuration
 
-把真实主机信息只放在服务器上的配置文件里，不要提交到 GitHub：
+GitHub 仓库只包含 example 文件。真实密钥只放在服务器上的 `config/*.php`。
 
-| File | Purpose |
-| --- | --- |
-| `config/database.php` | 数据库主机、库名、用户名、密码 |
-| `config/telegram.php` | Bot Token、机器人用户名 |
-| `config/app.php` | 时区、`app_key`、`cron_secret` |
+| Example | Copy to | Purpose |
+| --- | --- | --- |
+| `config/database.example.php` | `config/database.php` | 数据库主机、库名、用户名、密码 |
+| `config/telegram.example.php` | `config/telegram.php` | Bot Token、机器人用户名 |
+| `config/app.example.php` | `config/app.php` | 时区、`app_key`、`cron_secret` |
 
-仓库里这些文件只保留占位符，例如 `YOUR_DATABASE_NAME`、`YOUR_DATABASE_USER`、`YOUR_DATABASE_PASSWORD`。
+占位符示例：`your_database_name`、`your_db_password`、`YOUR_TELEGRAM_BOT_TOKEN`、`YOUR_CRON_SECRET`。
+
+HTTP Cron 请写成：
+
+```bash
+curl -s "https://YOUR_DOMAIN/cron/send_reminders.php?key=YOUR_CRON_SECRET" >/dev/null 2>&1
+```
+
+不要把真实 key、数据库密码或 Bot Token 写进文档。
 
 ## Docs
 
 - [INSTALL.md](INSTALL.md) — 主机、数据库、Cron
 - [TELEGRAM_SETUP.md](TELEGRAM_SETUP.md) — BotFather、`chat_id`、测试发送
-- [CPANEL_UPLOAD.txt](CPANEL_UPLOAD.txt) — cPanel 上传步骤
+- [CPANEL.md](CPANEL.md) — cPanel 上传步骤
 
 ## License
 

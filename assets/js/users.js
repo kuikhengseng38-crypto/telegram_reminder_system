@@ -60,7 +60,7 @@
                 return;
             }
             if (!res.found) {
-                APP.toast('Nobody has messaged the bot yet. Ask them to open @' + ($('#btnImportBot').data('bot') || 'khsreminder_bot') + ' and send /start, then import again.', 'error');
+                APP.toast('Nobody has messaged the bot yet. Ask them to open @' + ($('#btnImportBot').data('bot') || 'YourBotUsername') + ' and send /start, then import again.', 'error');
                 return;
             }
             APP.toast('Found ' + res.found + ', added ' + res.added + ', already saved ' + res.skipped, 'success');
