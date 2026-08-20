@@ -1,0 +1,5 @@
+# Production cron (cPanel) — optional
+# The admin site already sends due reminders from PHP while it is open.
+# On shared hosting you may also add this every 1 minute:
+
+php /home/USERNAME/public_html/cron/send_reminders.php >/dev/null 2>&1

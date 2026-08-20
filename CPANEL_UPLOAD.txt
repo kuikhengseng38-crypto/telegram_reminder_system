@@ -1,0 +1,28 @@
+cPanel upload guide
+
+1. Upload
+   - Upload the project zip in cPanel File Manager
+   - Extract into public_html  (or public_html/reminder)
+
+2. Import database
+   - phpMyAdmin -> select YOUR database
+   - Import database/schema_cpanel.sql
+   - Do NOT import schema.sql (it tries to CREATE DATABASE)
+
+3. Open the site
+   - https://YOURDOMAIN/admin/login.php
+   - Username: admin
+   - Password: Admin@123
+   - Change this password after login
+   - Delete install.php after the site works
+
+4. Optional: auto-send when nobody is in the admin
+   cPanel -> Cron Jobs -> Once Per Minute:
+   php /home/YOUR_CPANEL_USER/public_html/cron/send_reminders.php >/dev/null 2>&1
+   Adjust the path if the project is in a subfolder.
+
+Database is set in config/database.php:
+   host     localhost
+   dbname   YOUR_DATABASE_NAME
+   username YOUR_DATABASE_USER
+   password YOUR_DATABASE_PASSWORD
